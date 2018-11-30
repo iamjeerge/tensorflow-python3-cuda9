@@ -56,7 +56,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libpng12-dev \
         libzmq3-dev \
         pkg-config \
-        python-dev \
+        python3-dev \
         rsync \
         software-properties-common \
         unzip \
@@ -80,10 +80,10 @@ RUN mkdir /usr/local/cuda-9.0/lib &&  \
     ln -s /usr/include/nccl.h /usr/local/cuda/include/nccl.h
 
 RUN curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
-    python get-pip.py && \
+    python3 get-pip.py && \
     rm get-pip.py
 
-RUN pip --no-cache-dir install \
+RUN pip3 --no-cache-dir install \
         Pillow \
         h5py \
         ipykernel \
@@ -97,7 +97,7 @@ RUN pip --no-cache-dir install \
         sklearn \
         pandas \
         && \
-    python -m ipykernel.kernelspec
+    python3 -m ipykernel.kernelspec
 
 RUN ln -s -f /usr/bin/python3 /usr/bin/python
 
@@ -128,7 +128,7 @@ WORKDIR /tensorflow
 RUN git clone --branch=r1.12 --depth=1 https://github.com/tensorflow/tensorflow.git .
 
 # Configure the build for our CUDA configuration.
-ENV CI_BUILD_PYTHON python
+ENV CI_BUILD_PYTHON python3
 ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
 ENV TF_NEED_CUDA 1
 ENV TF_NEED_TENSORRT 1
@@ -147,7 +147,7 @@ RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/lib
         tensorflow/tools/pip_package:build_pip_package && \
     rm /usr/local/cuda/lib64/stubs/libcuda.so.1 && \
     bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip && \
-    pip --no-cache-dir install --upgrade /tmp/pip/tensorflow-*.whl && \
+    pip3 --no-cache-dir install --upgrade /tmp/pip/tensorflow-*.whl && \
     rm -rf /tmp/pip && \
     rm -rf /root/.cache
 # Clean up pip wheel and Bazel cache when done.
